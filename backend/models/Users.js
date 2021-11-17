@@ -1,5 +1,5 @@
-import mongoose from 'mongoose';
-  const { Schema } = mongoose;
+const  mongoose = require('mongoose');
+const { Schema } = mongoose;
 
   const UserSchema = new Schema({
     name:{
@@ -8,8 +8,7 @@ import mongoose from 'mongoose';
     },
     email:{
         type:String,
-        required: true,
-        unique:true
+        required: true
     },
     password:{
         type:String,
@@ -17,8 +16,11 @@ import mongoose from 'mongoose';
     },
     date:{
         type:Date,
-        required: Date.now
+        default: Date.now
     },
   });
 
-  module.exports = mongoose.model('user', UserSchema);
+  const User = mongoose.model('user', UserSchema);
+  /* User.createIndexes(); */
+  
+  module.exports = User
