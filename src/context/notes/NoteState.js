@@ -32,16 +32,13 @@ const NoteState = (props) => {
       },
       body: JSON.stringify({ title, description, tag })
     });
-    const json = response.json();
+    const json = await response.json();
+    console.log(json);
     console.log('Addin a new note');
     let note = {
-      "_id": "619dab61ddd522382036c781",
-      "user": "61989e29697e77a507ddd5ba",
       "title": title,
       "description": description,
-      "tag": tag,
-      "date": "2021-11-24T03:02:57.487Z",
-      "__v": 0
+      "tag": tag
     }
     setNotes(notes.concat(note));
 
@@ -59,7 +56,8 @@ const NoteState = (props) => {
         'auth-token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjE5ODllMjk2OTdlNzdhNTA3ZGRkNWJhIn0sImlhdCI6MTYzNzQ3Njk1MX0.eQhvdSq9j8SUFG7fEFoGcccnTd58C7tmZsbqmQNFzdE'
       },
     });
-    const json = response.json();
+    const json = await response.json();
+    console.log(json);
     console.log(`deleting a note` + id);
     const newNotes = notes.filter((note) => { return note._id !== id });
     setNotes(newNotes);
@@ -76,17 +74,21 @@ const NoteState = (props) => {
       },
       body: JSON.stringify({ title, description, tag })
     });
-    const json = response.json();
+    const json = await response.json();
+    console.log(json);
     //logic to edit in client
-    for (let index = 0; index < notes.length; index++) {
-      const element = notes[index];
+    let newNote = JSON.parse(JSON.stringify(notes));
+    // why this??
+      /* deep copy is created -- notes array */
+    for (let index = 0; index < newNote.length; index++) {
+      const element = newNote[index];
       if (element._id === id) {
         element.title = title;
         element.description = description;
         element.tag = tag;
       }
-
     }
+    setNotes(newNote);
   }
 
 

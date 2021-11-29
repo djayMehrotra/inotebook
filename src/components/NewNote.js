@@ -32,7 +32,11 @@ const NewNote = () => {
                         </div>
                         <div className="form-group">
                             <label htmlFor="description">Description</label>
-                            <input type="text" className="form-control" id="description" name="description" onChange={onChange} placeholder="description goes here" />
+                            <input type="text" className="form-control" id="description" name="description" onChange={onChange} placeholder="Description goes here" />
+                        </div>
+                        <div className="form-group">
+                            <label htmlFor="tag">Tag</label>
+                            <input type="text" className="form-control" id="tag" name="tag" onChange={onChange} placeholder="Tag name" />
                         </div>
                         <button type="submit" className="btn btn-primary my-2" onClick={handleClick}>Submit</button>
                     </form>
