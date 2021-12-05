@@ -2,12 +2,15 @@ import React, { useContext, useEffect, useRef, useState } from 'react'
 import noteContext from '../context/notes/noteContext'
 import NewNote from './NewNote'
 import NoteItem from './NoteItem'
+import { useNavigate } from 'react-router-dom';
 
-const Notes = () => {
+const Notes = (props) => {
   const context = useContext(noteContext)
   const { notes, getAllNotes, editNote } = context
+  let navigate = useNavigate();
+
   useEffect(() => {
-    getAllNotes()
+    localStorage.getItem('token') ? getAllNotes() : navigate('/login');
     // eslint-disable-next-line
   }, [])
 
@@ -22,7 +25,7 @@ const Notes = () => {
       eTitle: currentNote.title,
       eDescription: currentNote.description,
       eTag: currentNote.tag,
-    })
+    });
   }
 
   const handleClick = () => {
@@ -30,6 +33,7 @@ const Notes = () => {
     refClose.current.click();
     //addNote(note.title, note.description, note.tag);
     editNote(note.id, note.eTitle, note.eDescription, note.eTag);
+    props.showAlert('Notes updated Successfully', 'success');
   }
 
   const onChange = (e) => {
@@ -38,14 +42,15 @@ const Notes = () => {
 
   return (
     <>
-      <NewNote />
+      <NewNote showAlert={props.showAlert} />
 
       <div className="container">
         <div className="row my-3">
           <h2>Your note</h2>
+          {notes.length === 0 && <div className='container'>{`No notes to display`}</div>}  
           {notes.map((note) => {
             return (
-              <NoteItem key={note._id} updateNote={updateNote} note={note} />
+              <NoteItem showAlert={props.showAlert} key={note._id} updateNote={updateNote} note={note} />
             )
           })}
         </div>
@@ -95,6 +100,8 @@ const Notes = () => {
                     onChange={onChange}
                     placeholder="Enter title here"
                     value={note.eTitle}
+                    minLength={5}
+                    required
                   />
                 </div>
                 <div className="form-group">
@@ -107,6 +114,8 @@ const Notes = () => {
                     onChange={onChange}
                     placeholder="Description goes here"
                     value={note.eDescription}
+                    minLength={5}
+                    required
                   />
                 </div>
                 <div className="form-group">
@@ -136,6 +145,7 @@ const Notes = () => {
                 onClick={handleClick}
                 type="button"
                 className="btn btn-primary"
+                disabled={note.eTitle.length<5 || note.eDescription.length<5}
               >
                 Edit changes
               </button>

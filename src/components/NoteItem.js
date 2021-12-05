@@ -17,7 +17,7 @@ const NoteItem = (props) => {
                     <p className='d-flex justify-content-between'>
                         <span className="badge rounded-pill bg-primary p-2">{`#${note.tag}`}</span>
                         <span>
-                            <i className="fas fa-trash mx-2" onClick={()=>{deleteNote(note._id)}}></i>
+                            <i className="fas fa-trash mx-2" onClick={()=>{deleteNote(note._id); props.showAlert('Notes deleted Successfully', 'success');}}></i>
                             <i className="fas fa-edit mx-2" onClick={()=>{updateNote(note)}}></i>
                         </span>
                     </p>

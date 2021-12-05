@@ -6,6 +6,13 @@ const noteInitial = [];
 const NoteState = (props) => {
   const host = "http://localhost:5000";
   const [notes, setNotes] = useState(noteInitial);
+  const aboutUsDetails = {
+    "name": "Harry",
+    "class": "5b"
+  }
+  /* const [state, setState] = useState(s1) */
+  // eslint-disable-next-line
+  const [aboutUsState, setaboutUsState] = useState(aboutUsDetails);
 
   //Get all notes
   const getAllNotes = async () => {
@@ -14,7 +21,7 @@ const NoteState = (props) => {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        'auth-token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjE5ODllMjk2OTdlNzdhNTA3ZGRkNWJhIn0sImlhdCI6MTYzNzQ3Njk1MX0.eQhvdSq9j8SUFG7fEFoGcccnTd58C7tmZsbqmQNFzdE'
+        'auth-token': localStorage.getItem('token')
       },
     });
     const json = await response.json();
@@ -28,21 +35,19 @@ const NoteState = (props) => {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'auth-token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjE5ODllMjk2OTdlNzdhNTA3ZGRkNWJhIn0sImlhdCI6MTYzNzQ3Njk1MX0.eQhvdSq9j8SUFG7fEFoGcccnTd58C7tmZsbqmQNFzdE'
+        'auth-token': localStorage.getItem('token')
       },
       body: JSON.stringify({ title, description, tag })
     });
-    const json = await response.json();
-    console.log(json);
+    const note = await response.json();
+    /* console.log(json);
     console.log('Addin a new note');
     let note = {
       "title": title,
       "description": description,
       "tag": tag
-    }
+    } */
     setNotes(notes.concat(note));
-
-
   }
 
   //Delete a note
@@ -53,7 +58,7 @@ const NoteState = (props) => {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
-        'auth-token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjE5ODllMjk2OTdlNzdhNTA3ZGRkNWJhIn0sImlhdCI6MTYzNzQ3Njk1MX0.eQhvdSq9j8SUFG7fEFoGcccnTd58C7tmZsbqmQNFzdE'
+        'auth-token': localStorage.getItem('token')
       },
     });
     const json = await response.json();
@@ -61,6 +66,7 @@ const NoteState = (props) => {
     console.log(`deleting a note` + id);
     const newNotes = notes.filter((note) => { return note._id !== id });
     setNotes(newNotes);
+    
   }
 
   //Edit a note
@@ -70,7 +76,7 @@ const NoteState = (props) => {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
-        'auth-token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjE5ODllMjk2OTdlNzdhNTA3ZGRkNWJhIn0sImlhdCI6MTYzNzQ3Njk1MX0.eQhvdSq9j8SUFG7fEFoGcccnTd58C7tmZsbqmQNFzdE'
+        'auth-token': localStorage.getItem('token')
       },
       body: JSON.stringify({ title, description, tag })
     });
@@ -79,7 +85,7 @@ const NoteState = (props) => {
     //logic to edit in client
     let newNote = JSON.parse(JSON.stringify(notes));
     // why this??
-      /* deep copy is created -- notes array */
+    /* deep copy is created -- notes array */
     for (let index = 0; index < newNote.length; index++) {
       const element = newNote[index];
       if (element._id === id) {
@@ -93,7 +99,7 @@ const NoteState = (props) => {
 
 
   return (
-    <NoteContext.Provider value={{ notes, addNote, deleteNote, editNote, getAllNotes }}>
+    <NoteContext.Provider value={{ notes, addNote, deleteNote, editNote, getAllNotes, aboutUsDetails }}>
       {props.children}
     </NoteContext.Provider>
   )
